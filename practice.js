@@ -18,7 +18,7 @@ const options = {
     },*/
     first_name: 'aneesh',
     last_name: 'vempaty',
-    email: 'dummy@gmail.com',
+    email: 'a@gmail.com',
     gender: 'male'
 
 }
@@ -26,87 +26,90 @@ const options = {
 //var id = ''
 
 makeRequest('https://gorest.co.in/public-api/users', 'POST', options)
-.then((resp) => {
-    if (resp.statusCode === 502) {
-        console.log('Received 502 error')
-        return
-    }
-    if (resp.statusCode === 500) {
-        console.log('Received 502 error')
-        return
-    }
-    if (resp.statusCode >= 400) {
-        console.log('Received 40X error')
-        return
-    } else if (resp.statusCode === 200) {
-        console.log('Received 200')
-        console.log(resp)
-    }
-    //console.log(resp.statusCode)
-    console.log(resp.body)
-    var id = resp.body.result.id
-    return id
-})
-.then((id) => {
-    makeRequest('https://gorest.co.in/public-api/users/' + id, 'GET', {})
     .then((resp) => {
         if (resp.statusCode === 502) {
-            throw new Error('Received 502 error at GET ')
+            console.log('Received 502 error')
+            return
         }
         if (resp.statusCode === 500) {
-            throw new Error('Received 502 error at GET ')
+            console.log('Received 502 error')
+            return
+        }
+        if (resp.statusCode >= 400) {
+            console.log('Received 40X error')
+            return
+        } else if (resp.statusCode === 200) {
+            console.log('Received 200')
+            console.log(resp)
+        }
+        //console.log(resp.statusCode)
+        console.log(resp.body)
+        var id = resp.body.result.id
+        return id
+    })
+    .then((id) => {
+        makeRequest('https://gorest.co.in/public-api/users/' + id, 'GET', {})
+            .then((resp) => {
+                if (resp.statusCode === 502) {
+                    throw new Error('Received 502 error at GET ')
+                }
+                if (resp.statusCode === 500) {
+                    throw new Error('Received 502 error at GET ')
 
-        }
-        if (resp.statusCode >= 400) {
-            throw new Error('Received 40X error at GET ')
-        } else if (resp.statusCode === 200) {
-            console.log('Received 200 at GEt')
-            //console.log(resp)
-        }
-        console.log(id)
-        console.log(resp.body)
+                }
+                if (resp.statusCode >= 400) {
+                    throw new Error('Received 40X error at GET ')
+                } else if (resp.statusCode === 200) {
+                    console.log('Received 200 at GET')
+                    //console.log(resp)
+                }
+                console.log(id)
+                console.log(resp.body)
+                return id
+            })
+            .then((id) => {
+                makeRequest('https://gorest.co.in/public-api/users/' + id, 'PUT', { website: "http://google.com" })
+                    .then((resp) => {
+                        if (resp.statusCode === 502) {
+                            throw new Error('Received 502 error at PUT ')
+                        }
+                        if (resp.statusCode === 500) {
+                            throw new Error('Received 502 error at PUT ')
+                        }
+                        if (resp.statusCode >= 400) {
+                            throw new Error('Received 40X error at PUT ')
+                        } else if (resp.statusCode === 200) {
+                            console.log('Received 200 at PUT')
+                            //console.log(resp)
+                        }
+                        console.log(id)
+                        console.log(resp.statusCode)
+                        console.log(resp.body)
+                        return id
+                    })
+                    .then((id) => {
+                        makeRequest('https://gorest.co.in/public-api/users/' + id, 'DELETE', {})
+                            .then((resp) => {
+                                if (resp.statusCode === 502) {
+                                    throw new Error('Received 502 error at DELETE ')
+                                }
+                                if (resp.statusCode === 500) {
+                                    throw new Error('Received 502 error at DELETE ')
+                                }
+                                if (resp.statusCode >= 400) {
+                                    throw new Error('Received 40X error at DELETE ')
+                                } else if (resp.statusCode === 200) {
+                                    console.log('Received 200 at DELETE')
+                                    //console.log(resp)
+                                }
+                                console.log(id)
+                                console.log(resp.statusCode)
+                                console.log(resp.body._meta.success)
+                            })
+                    })
+
+            })
     })
-    return id
-})
-.then((id) => {
-    makeRequest('https://gorest.co.in/public-api/users/' + id, 'PUT', { website: "http://google.com" }).then((resp) => {
-        if (resp.statusCode === 502) {
-            throw new Error('Received 502 error at PUT ')
-        }
-        if (resp.statusCode === 500) {
-            throw new Error('Received 502 error at PUT ')
-        }
-        if (resp.statusCode >= 400) {
-            throw new Error('Received 40X error at PUT ')
-        } else if (resp.statusCode === 200) {
-            console.log('Received 200 at PUT')
-            //console.log(resp)
-        }
-        console.log(id)
-        console.log(resp.statusCode)
-        console.log(resp.body)
-    })
-    return id
-})
-.then((id) => {
-    makeRequest('https://gorest.co.in/public-api/users/' + id, 'DELETE', {}).then((resp) => {
-        if (resp.statusCode === 502) {
-            throw new Error('Received 502 error at DELETE ')
-        }
-        if (resp.statusCode === 500) {
-            throw new Error('Received 502 error at DELETE ')
-        }
-        if (resp.statusCode >= 400) {
-            throw new Error('Received 40X error at DELETE ')
-        } else if (resp.statusCode === 200) {
-            console.log('Received 200 at DELETE')
-            //console.log(resp)
-        }
-        console.log(id)
-        console.log(resp.statusCode)
-        console.log(resp.body._meta.success)
-    })
-})
     .catch((err) => {
         console.log(err.statusCode)
         console.log(err.message)
@@ -123,7 +126,7 @@ function makeRequest(url, method, body) {
             }
             resolve(res)
         })
-        .auth(null, null, true, 'wLejCijFBsVpo8gKfXH-JAqN_slWt3x6tOVI')
+            .auth(null, null, true, 'Lqif-8sx6wDKyuTp3BQzLnyYnkafL6R5_TVd')
     })
 }
 
